@@ -33,9 +33,6 @@ Run frontend (separate terminal):
 npm --prefix frontend run dev
 ```
 
-Frontend defaults to backend URL `http://localhost:3001`.
-You can override with `VITE_API_URL`.
-
 ## Build
 
 ```bash
@@ -56,23 +53,13 @@ This command builds both `frontend` and `server`.
 - For production multi-instance deployment, move round state to Postgres/Redis with atomic update/lock for first-winner correctness.
 - Question generation is template-based and intentionally simple.
 
-## Deploy (Cloudflare Pages + Railway)
+## Deploy (Render) - Single Monolithic App
 
-Deploy the backend first and note its public URL.
+This repo is deployable as one Render service. The backend serves the built frontend from `frontend/dist`.
 
-### Backend (Railway)
-1. Create a new Railway project from this repository.
-2. Set the root directory to `server`.
-3. Use:
-   - Build command: `npm run build`
-   - Start command: `npm start`
-4. Railway will set `PORT` automatically.
+1. Create a Render **Web Service** from this repo.
+2. Root directory: `/` (repo root)
+3. Build command: `npm run build`
+4. Start command: `npm start`
 
-### Frontend (Cloudflare Pages)
-1. Create a Cloudflare Pages project connected to the repo.
-2. Set Root Directory to `frontend`.
-3. Build command: `npm install && npm run build`
-4. Output directory: `dist`
-5. Set `VITE_API_URL` to your Railway backend URL (example: `https://your-backend.up.railway.app`)
-
-After deploy, open the Cloudflare frontend URL and test multiple browser tabs.
+After deploy, open the Render URL and test multiple tabs to confirm first-winner behavior.

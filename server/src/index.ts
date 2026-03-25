@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import cors from "cors";
 import express, { Request, Response } from "express";
 import { GameEngine } from "./gameEngine.js";
@@ -72,5 +75,17 @@ app.post(
     res.json(result);
   },
 );
+
+const currentFilePath = fileURLToPath(import.meta.url);
+const repoRoot = path.resolve(path.dirname(currentFilePath), "..", "..");
+const frontendDist = path.join(repoRoot, "frontend", "dist");
+
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  // Express v5 does not like the raw "*" route pattern; use a middleware fallback instead.
+  app.use((_req, res) => {
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+}
 
 app.listen(PORT);

@@ -1,0 +1,11 @@
+{
+  "name": "caimera-monolith",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "postinstall": "npm --prefix frontend install && npm --prefix server install",
+    "build": "npm --prefix frontend run build && npm --prefix server run build",
+    "start": "node server/dist/index.js"
+  }
+}
