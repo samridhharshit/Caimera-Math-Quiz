@@ -14,21 +14,29 @@ Minimal fullstack implementation for a real-time competitive quiz:
 - Realtime updates: SSE (`/stream`)
 
 ## Run Locally
-
-Install dependencies:
+Install dependencies (installs both frontend + backend):
 
 ```bash
 npm install
 ```
 
-Run backend:
+Build and start the monolithic app (backend serves the built frontend):
 
+```bash
+npm start
+```
+
+Open:
+`http://localhost:3001`
+
+Optional (for hot reload): run backend dev server + frontend dev server (Vite proxies API routes):
+
+Terminal 1:
 ```bash
 npm --prefix server run dev
 ```
 
-Run frontend (separate terminal):
-
+Terminal 2:
 ```bash
 npm --prefix frontend run dev
 ```
