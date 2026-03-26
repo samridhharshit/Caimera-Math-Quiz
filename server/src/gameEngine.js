@@ -1,14 +1,12 @@
 import { EventEmitter } from "node:events";
 import { RoundStatus, SubmissionResult } from "./enums.js";
 import { generateProblem } from "./problemGenerator.js";
-import { GameSnapshot, LeaderboardEntry, Problem, SubmitResponse } from "./types.js";
 
 const NEXT_ROUND_DELAY_MS = 3000;
 
-const createRoundId = (): string =>
-  `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+const createRoundId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-const toPublicRound = (round: Problem): Omit<Problem, "answer"> => ({
+const toPublicRound = (round) => ({
   id: round.id,
   text: round.text,
   startedAt: round.startedAt,
@@ -18,24 +16,22 @@ const toPublicRound = (round: Problem): Omit<Problem, "answer"> => ({
 });
 
 export class GameEngine extends EventEmitter {
-  private currentRound: Problem;
-  private readonly wins = new Map<string, number>();
-
   constructor() {
     super();
     this.currentRound = this.createRound();
+    this.wins = new Map();
   }
 
-  public snapshot(): GameSnapshot {
+  snapshot() {
     return {
       round: toPublicRound(this.currentRound),
       leaderboard: this.leaderboard(),
     };
   }
 
-  public submit(username: string, answer: string, roundId: string): SubmitResponse {
+  submit(username, answer, roundId) {
     const cleanName = username.trim();
-    const cleanAnswer = answer.trim();
+    const cleanAnswer = (answer ?? "").trim();
 
     if (!cleanAnswer) {
       return { result: SubmissionResult.EMPTY_ANSWER, round: toPublicRound(this.currentRound) };
@@ -63,6 +59,7 @@ export class GameEngine extends EventEmitter {
       winner: cleanName,
       solvedAt: new Date().toISOString(),
     };
+
     this.wins.set(cleanName, (this.wins.get(cleanName) ?? 0) + 1);
     this.emit("roundSolved", this.snapshot());
     this.queueNextRound();
@@ -70,21 +67,21 @@ export class GameEngine extends EventEmitter {
     return { result: SubmissionResult.WON, round: toPublicRound(this.currentRound) };
   }
 
-  private queueNextRound(): void {
+  queueNextRound() {
     setTimeout(() => {
       this.currentRound = this.createRound();
       this.emit("roundStarted", this.snapshot());
     }, NEXT_ROUND_DELAY_MS);
   }
 
-  private leaderboard(): LeaderboardEntry[] {
+  leaderboard() {
     return [...this.wins.entries()]
       .map(([username, wins]) => ({ username, wins }))
       .sort((a, b) => b.wins - a.wins || a.username.localeCompare(b.username))
       .slice(0, 10);
   }
 
-  private createRound(): Problem {
+  createRound() {
     const draft = generateProblem();
     return {
       id: createRoundId(),
@@ -95,3 +92,4 @@ export class GameEngine extends EventEmitter {
     };
   }
 }
+

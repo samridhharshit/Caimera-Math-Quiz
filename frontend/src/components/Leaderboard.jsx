@@ -1,10 +1,4 @@
-import type { LeaderboardEntry } from "../types/game";
-
-type Props = {
-  entries: LeaderboardEntry[];
-};
-
-export const Leaderboard = ({ entries }: Props) => (
+export const Leaderboard = ({ entries }) => (
   <aside className="panel">
     <h2>Leaderboard</h2>
     {entries.length === 0 ? <p className="subtle">No winners yet.</p> : null}

@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { AnswerForm } from "./components/AnswerForm";
-import { Leaderboard } from "./components/Leaderboard";
-import { ProblemCard } from "./components/ProblemCard";
-import { useGame } from "./hooks/useGame";
-import { SubmissionResult } from "./types/game";
+import { AnswerForm } from "./components/AnswerForm.jsx";
+import { Leaderboard } from "./components/Leaderboard.jsx";
+import { ProblemCard } from "./components/ProblemCard.jsx";
+import { useGame } from "./hooks/useGame.js";
+import { SubmissionResult } from "./types/game.js";
 
-const resultLabel: Record<SubmissionResult, string> = {
-  WON: "You won this round.",
-  CORRECT_BUT_LATE: "Correct, but someone was faster.",
-  WRONG: "Wrong answer. Try again.",
-  INVALID_ROUND: "Round changed. Submit on the active question.",
-  EMPTY_ANSWER: "Enter an answer before submitting.",
+const resultLabel = {
+  [SubmissionResult.WON]: "You won this round.",
+  [SubmissionResult.CORRECT_BUT_LATE]: "Correct, but someone was faster.",
+  [SubmissionResult.WRONG]: "Wrong answer. Try again.",
+  [SubmissionResult.INVALID_ROUND]: "Round changed. Submit on the active question.",
+  [SubmissionResult.EMPTY_ANSWER]: "Enter an answer before submitting.",
 };
 
 function App() {
@@ -19,9 +19,7 @@ function App() {
   const { snapshot, submit, submitResult, submitLoading } = useGame();
 
   const onSubmit = async () => {
-    if (!snapshot) {
-      return;
-    }
+    if (!snapshot) return;
     await submit({ username, answer, roundId: snapshot.round.id });
     setAnswer("");
   };

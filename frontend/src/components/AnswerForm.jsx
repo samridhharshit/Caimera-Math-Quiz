@@ -1,12 +1,3 @@
-type Props = {
-  username: string;
-  answer: string;
-  onUsernameChange: (value: string) => void;
-  onAnswerChange: (value: string) => void;
-  onSubmit: () => void;
-  disabled: boolean;
-};
-
 export const AnswerForm = ({
   username,
   answer,
@@ -14,7 +5,7 @@ export const AnswerForm = ({
   onAnswerChange,
   onSubmit,
   disabled,
-}: Props) => (
+}) => (
   <div className="form">
     <input
       className="input"

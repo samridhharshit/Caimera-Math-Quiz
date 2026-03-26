@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js"
+    "dev": "node src/index.js",
+    "build": "echo \"no build step for JS backend\"",
+    "start": "node src/index.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

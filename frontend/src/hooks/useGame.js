@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { gameApi } from "../api/gameApi";
-import { SubmissionResult } from "../types/game";
-import type { GameSnapshot, SubmitPayload } from "../types/game";
+import { SubmissionResult } from "../types/game.js";
 
 export const useGame = () => {
-  const [snapshot, setSnapshot] = useState<GameSnapshot | null>(null);
-  const [submitResult, setSubmitResult] = useState<SubmissionResult | null>(null);
+  const [snapshot, setSnapshot] = useState(null);
+  const [submitResult, setSubmitResult] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export const useGame = () => {
       if (!alive) {
         return;
       }
-      const incoming = JSON.parse(event.data) as GameSnapshot;
+      const incoming = JSON.parse(event.data);
       setSnapshot(incoming);
     };
 
@@ -47,11 +46,12 @@ export const useGame = () => {
     };
   }, []);
 
-  const submit = async (payload: SubmitPayload) => {
+  const submit = async (payload) => {
     setSubmitLoading(true);
     try {
       const response = await gameApi.submit(payload);
-      setSubmitResult(response.result as SubmissionResult);
+      const result = response.result;
+      setSubmitResult(Object.values(SubmissionResult).includes(result) ? result : null);
       const updated = await gameApi.getState();
       setSnapshot(updated);
     } finally {

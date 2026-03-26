@@ -10,7 +10,7 @@ Minimal fullstack implementation for a real-time competitive quiz:
 ## Tech Stack
 
 - Frontend: React + TypeScript + Vite
-- Backend: Node.js + Express + TypeScript
+- Backend: Node.js + Express
 - Realtime updates: SSE (`/stream`)
 
 ## Run Locally

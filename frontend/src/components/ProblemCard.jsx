@@ -1,11 +1,6 @@
-import { RoundStatus } from "../types/game";
-import type { Round } from "../types/game";
+import { RoundStatus } from "../types/game.js";
 
-type Props = {
-  round?: Round;
-};
-
-export const ProblemCard = ({ round }: Props) => {
+export const ProblemCard = ({ round }) => {
   if (!round) {
     return <div className="card">Loading current question...</div>;
   }
